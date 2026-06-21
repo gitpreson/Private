@@ -41,12 +41,24 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _send() async {
-    final text = _controller.text;
+    final text = _controller.text.trim();
+    if (text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('请输入消息内容')),
+      );
+      return;
+    }
     setState(() => _sending = true);
     try {
       await widget.matrix.sendText(widget.room, text);
       _controller.clear();
       await _loadTimeline();
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('消息发送失败，请检查网络后重试')),
+        );
+      }
     } finally {
       if (mounted) setState(() => _sending = false);
     }
@@ -102,9 +114,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   Expanded(
                     child: TextField(
                       controller: _controller,
+                      enabled: !_sending,
                       decoration: const InputDecoration(hintText: '输入消息'),
                       minLines: 1,
                       maxLines: 4,
+                      textInputAction: TextInputAction.send,
+                      onSubmitted: (_) => _sending ? null : _send(),
                     ),
                   ),
                   const SizedBox(width: 8),

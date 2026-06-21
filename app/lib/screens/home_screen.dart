@@ -4,7 +4,9 @@ import 'package:matrix/matrix.dart';
 import '../config/app_config.dart';
 import '../services/matrix_service.dart';
 import 'chat_screen.dart';
+import 'communities_screen.dart';
 import 'files_screen.dart';
+import 'notifications_screen.dart';
 import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -51,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: _tab == 0
-          ? FutureBuilder<List<Room>>(
+      body: switch (_tab) {
+        0 => FutureBuilder<List<Room>>(
               future: _rooms,
               builder: (context, snapshot) {
                 final rooms = snapshot.data ?? [];
@@ -82,20 +84,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
-            )
-          : _tab == 1
-              ? FilesScreen(config: widget.config)
-              : SettingsScreen(
-                  config: widget.config,
-                  matrix: widget.matrix,
-                  onLoggedOut: widget.onLoggedOut,
-                ),
+            ),
+        1 => const CommunitiesScreen(),
+        2 => FilesScreen(config: widget.config),
+        3 => const NotificationsScreen(),
+        _ => SettingsScreen(
+            config: widget.config,
+            matrix: widget.matrix,
+            onLoggedOut: widget.onLoggedOut,
+          ),
+      },
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
         onDestinationSelected: (value) => setState(() => _tab = value),
         destinations: const [
           NavigationDestination(icon: Icon(Icons.chat_bubble_outline), selectedIcon: Icon(Icons.chat_bubble), label: '消息'),
+          NavigationDestination(icon: Icon(Icons.groups_outlined), selectedIcon: Icon(Icons.groups), label: '社群'),
           NavigationDestination(icon: Icon(Icons.folder_outlined), selectedIcon: Icon(Icons.folder), label: '文件'),
+          NavigationDestination(icon: Icon(Icons.notifications_outlined), selectedIcon: Icon(Icons.notifications), label: '通知'),
           NavigationDestination(icon: Icon(Icons.settings_outlined), selectedIcon: Icon(Icons.settings), label: '设置'),
         ],
       ),
