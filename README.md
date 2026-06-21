@@ -59,6 +59,14 @@ node scripts/smoke-test.mjs
 
 该脚本会检查后台登录、只读权限、用户/注册码/App 注册/App 会话/公告/审计日志等核心链路。运行前需要先启动 Admin Backend。
 
+GitHub Actions APK 工作流检查：
+
+```bash
+node scripts/workflow-check.mjs
+```
+
+该脚本会检查 APK workflow 是否包含 Android SDK、Flutter、compileSdk、Analyze、Build 和 Artifact 上传等关键步骤。
+
 部署配置检查：
 
 ```bash

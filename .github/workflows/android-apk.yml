@@ -19,6 +19,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -32,7 +35,13 @@ jobs:
         run: flutter create --platforms=android .
 
       - name: Use compileSdk 36
-        run: perl -0pi -e 's/compileSdk = flutter\.compileSdkVersion/compileSdk = 36/' android/app/build.gradle
+        run: |
+          if [ -f android/app/build.gradle ]; then
+            perl -0pi -e 's/compileSdk = flutter\.compileSdkVersion/compileSdk = 36/' android/app/build.gradle
+          fi
+          if [ -f android/app/build.gradle.kts ]; then
+            perl -0pi -e 's/compileSdk = flutter\.compileSdkVersion/compileSdk = 36/' android/app/build.gradle.kts
+          fi
 
       - name: Install dependencies
         run: flutter pub get
