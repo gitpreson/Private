@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Private IM Local Console</title>
+  <style>
+    :root {
+      --bg: #f3f5f7;
+      --surface: #fff;
+      --line: #d8e0e7;
+      --text: #17212b;
+      --muted: #65727f;
+      --teal: #0f927d;
+      --blue: #2463eb;
+      --rose: #be3455;
+      --amber: #9b6a12;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      width: min(1120px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 42px 0;
+    }
+    p, h1, h2, h3 { margin: 0; }
+    header {
+      display: grid;
+      grid-template-columns: 1.4fr .8fr;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+    .eyebrow {
+      margin-bottom: 9px;
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+    .sub {
+      margin-top: 14px;
+      max-width: 680px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .status {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 18px;
+    }
+    .status div {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .status div:last-child { border-bottom: 0; }
+    .status strong { color: var(--text); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    a.card {
+      display: flex;
+      min-height: 178px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      color: inherit;
+      text-decoration: none;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+    a.card:hover {
+      transform: translateY(-2px);
+      border-color: #b7c5d1;
+      box-shadow: 0 14px 32px rgba(23, 33, 43, .1);
+    }
+    .primary {
+      grid-column: span 2;
+      min-height: 230px;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      width: max-content;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #e7f5f1;
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .blue { background: #edf3ff; color: var(--blue); }
+    .rose { background: #fff0f3; color: var(--rose); }
+    .amber { background: #fff7e8; color: var(--amber); }
+    h2 { margin-top: 18px; font-size: 25px; }
+    h3 { margin-top: 16px; font-size: 18px; }
+    .desc {
+      margin-top: 9px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .url {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+    footer {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    @media (max-width: 900px) {
+      header { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      main { padding: 28px 0; }
+      .grid { grid-template-columns: 1fr; }
+      .primary { grid-column: span 1; min-height: 190px; }
+      a.card { min-height: 156px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <section>
+        <p class="eyebrow">Local Console</p>
+        <h1>Private IM 本地开发入口</h1>
+        <p class="sub">这里是当前项目的总入口：先看 App 预览和运营后台，再检查 API、功能说明书和真实 Synapse 部署文档。当前阶段先在本地跑通，后面再换域名和生产环境。</p>
+      </section>
+      <section class="status" aria-label="本地服务状态">
+        <div><span>前端入口</span><strong>127.0.0.1:4173</strong></div>
+        <div><span>后台 API</span><strong>127.0.0.1:4180</strong></div>
+        <div><span>运行模式</span><strong>Mock / 可切 Synapse</strong></div>
+      </section>
+    </header>
+
+    <section class="grid">
+      <a class="card primary" href="./app-preview/">
+        <span class="tag">App Preview</span>
+        <div>
+          <h2>聊天客户端预览</h2>
+          <p class="desc">会话、聊天、群资料、文件、安全、设置和举报链路，用来先确认 App 产品感觉。</p>
+        </div>
+        <p class="url">/app-preview/</p>
+      </a>
+
+      <a class="card primary" href="./admin/web/">
+        <span class="tag blue">Admin Console</span>
+        <div>
+          <h2>运营后台</h2>
+          <p class="desc">用户、群聊、媒体、举报、系统通知、注册管理和系统维护，包装 Synapse Admin API。</p>
+        </div>
+        <p class="url">/admin/web/</p>
+      </a>
+
+      <a class="card" href="http://127.0.0.1:4180/api/health">
+        <span class="tag rose">API</span>
+        <div>
+          <h3>后端健康检查</h3>
+          <p class="desc">确认 Admin Backend 是否正在运行。</p>
+        </div>
+        <p class="url">:4180/api/health</p>
+      </a>
+
+      <a class="card" href="./outputs/%E5%8A%9F%E8%83%BD%E8%AF%B4%E6%98%8E%E4%B9%A6.md">
+        <span class="tag amber">Spec</span>
+        <div>
+          <h3>功能说明书</h3>
+          <p class="desc">查看当前 App、后台和服务端功能范围。</p>
+        </div>
+        <p class="url">outputs/功能说明书.md</p>
+      </a>
+
+      <a class="card" href="./docs/preview.md">
+        <span class="tag">Docs</span>
+        <div>
+          <h3>预览说明</h3>
+          <p class="desc">本地预览、账号、接口和验证脚本说明。</p>
+        </div>
+        <p class="url">docs/preview.md</p>
+      </a>
+
+      <a class="card" href="./server/README.md">
+        <span class="tag blue">Synapse</span>
+        <div>
+          <h3>真实服务端</h3>
+          <p class="desc">Docker Compose、Synapse、PostgreSQL、Redis、coturn 和后台切换步骤。</p>
+        </div>
+        <p class="url">server/README.md</p>
+      </a>
+    </section>
+
+    <footer>后台默认账号：admin / admin123。App 预览走本地 Demo Token；真实 Flutter App 后续连接 Matrix/Synapse 登录。</footer>
+  </main>
+</body>
+</html>

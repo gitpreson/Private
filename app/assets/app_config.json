@@ -1,0 +1,9 @@
+{
+  "brandName": "Private IM",
+  "homeserverUrl": "http://127.0.0.1:8008",
+  "adminBackendUrl": "http://127.0.0.1:4180",
+  "registrationEnabled": false,
+  "federationEnabled": false,
+  "e2eeDefault": true,
+  "maxUploadMb": 100
+}

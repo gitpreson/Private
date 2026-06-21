@@ -1,0 +1,109 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  synapse:
+    image: matrixdotorg/synapse:latest
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SYNAPSE_SERVER_NAME: ${SERVER_NAME}
+      SYNAPSE_REPORT_STATS: ${SYNAPSE_REPORT_STATS}
+    volumes:
+      - ./synapse:/data
+      - synapse-media:/media
+    ports:
+      - "8008:8008"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8008/_matrix/client/versions', timeout=5)\""]
+      interval: 15s
+      timeout: 8s
+      retries: 8
+
+  admin-backend:
+    image: node:22-alpine
+    restart: unless-stopped
+    working_dir: /app
+    depends_on:
+      synapse:
+        condition: service_healthy
+    environment:
+      ADMIN_BACKEND_MODE: ${ADMIN_BACKEND_MODE}
+      ADMIN_BACKEND_PORT: ${ADMIN_BACKEND_PORT}
+      ADMIN_OWNER_USERNAME: ${ADMIN_OWNER_USERNAME}
+      ADMIN_OWNER_PASSWORD: ${ADMIN_OWNER_PASSWORD}
+      ADMIN_OWNER_TOKEN: ${ADMIN_OWNER_TOKEN}
+      ADMIN_OPERATOR_USERNAME: ${ADMIN_OPERATOR_USERNAME}
+      ADMIN_OPERATOR_PASSWORD: ${ADMIN_OPERATOR_PASSWORD}
+      ADMIN_OPERATOR_TOKEN: ${ADMIN_OPERATOR_TOKEN}
+      ADMIN_AUDITOR_USERNAME: ${ADMIN_AUDITOR_USERNAME}
+      ADMIN_AUDITOR_PASSWORD: ${ADMIN_AUDITOR_PASSWORD}
+      ADMIN_AUDITOR_TOKEN: ${ADMIN_AUDITOR_TOKEN}
+      APP_DEMO_TOKEN: ${APP_DEMO_TOKEN}
+      SYNAPSE_ADMIN_API_BASE_URL: http://synapse:8008
+      SYNAPSE_ADMIN_TOKEN: ${SYNAPSE_ADMIN_TOKEN}
+      MOCK_DB_PATH: /app/work/runtime/mock-db.json
+    command: ["node", "admin/backend/server.mjs"]
+    volumes:
+      - ..:/app
+    ports:
+      - "${ADMIN_BACKEND_PORT}:${ADMIN_BACKEND_PORT}"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:' + (process.env.ADMIN_BACKEND_PORT || 4180) + '/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  coturn:
+    image: coturn/coturn:latest
+    restart: unless-stopped
+    ports:
+      - "3478:3478/tcp"
+      - "3478:3478/udp"
+    volumes:
+      - ./coturn/turnserver.conf:/etc/coturn/turnserver.conf:ro
+
+  nginx:
+    image: nginx:1.27-alpine
+    profiles: ["proxy"]
+    restart: unless-stopped
+    depends_on:
+      - synapse
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+
+volumes:
+  postgres-data:
+  redis-data:
+  synapse-media:

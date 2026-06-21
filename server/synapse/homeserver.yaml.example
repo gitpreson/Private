@@ -1,0 +1,48 @@
+server_name: "localhost"
+public_baseurl: "http://localhost:8008/"
+pid_file: /data/homeserver.pid
+signing_key_path: "/data/localhost.signing.key"
+macaroon_secret_key: "change-this-macaroon-secret"
+form_secret: "change-this-form-secret"
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+        compress: false
+
+database:
+  name: psycopg2
+  args:
+    user: synapse
+    password: change-me-local
+    database: synapse
+    host: postgres
+    cp_min: 5
+    cp_max: 10
+
+redis:
+  enabled: true
+  host: redis
+
+media_store_path: /media
+uploads_path: /media/uploads
+max_upload_size: 100M
+
+enable_registration: false
+registration_shared_secret: "admin-local-secret"
+
+turn_uris:
+  - "turn:localhost:3478?transport=udp"
+  - "turn:localhost:3478?transport=tcp"
+turn_shared_secret: "turn-local-secret"
+turn_user_lifetime: "1h"
+
+trusted_key_servers:
+  - server_name: "matrix.org"
+
+report_stats: false
+suppress_key_server_warning: true

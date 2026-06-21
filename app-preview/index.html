@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Private IM App Preview</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <section class="login-screen" data-login-screen>
+    <div class="login-card">
+      <div class="brand-mark">PX</div>
+      <form data-app-login-form>
+        <h1>App 登录</h1>
+        <p>本地 Demo 账号：alice / demo123</p>
+        <label class="login-field">
+          <span>账号</span>
+          <input name="username" value="alice" autocomplete="username">
+        </label>
+        <label class="login-field">
+          <span>密码</span>
+          <input name="password" value="demo123" type="password" autocomplete="current-password">
+        </label>
+        <button class="send full" type="submit">登录</button>
+      </form>
+      <form class="register-box" data-app-register-form>
+        <h2>注册新账号</h2>
+        <div class="register-grid">
+          <label class="login-field">
+            <span>账号</span>
+            <input name="username" value="newuser">
+          </label>
+          <label class="login-field">
+            <span>昵称</span>
+            <input name="displayName" value="New User">
+          </label>
+        </div>
+        <label class="login-field">
+          <span>邀请码</span>
+          <input name="inviteCode" value="WELCOME2026">
+        </label>
+        <button class="tool-btn wide" type="submit">注册并进入</button>
+      </form>
+    </div>
+  </section>
+  <main class="app-shell">
+    <aside class="rail" aria-label="主导航">
+      <div class="brand-mark">PX</div>
+      <button class="rail-btn active" title="会话" data-view="messages">M</button>
+      <button class="rail-btn" title="通讯录" data-view="contacts">C</button>
+      <button class="rail-btn" title="文件" data-view="files">F</button>
+      <button class="rail-btn" title="安全" data-view="security">K</button>
+      <button class="rail-btn" title="设置" data-view="settings">S</button>
+      <button class="rail-btn bottom" title="退出登录" data-app-logout>G</button>
+    </aside>
+
+    <section class="inbox" aria-label="会话列表">
+      <header class="panel-head">
+        <div>
+          <p class="eyebrow">localhost</p>
+          <h1 data-brand-name>Private IM</h1>
+        </div>
+        <button class="icon-btn" title="新建会话">+</button>
+      </header>
+
+      <label class="search">
+        <span>Search</span>
+        <input value="" placeholder="搜索联系人、群聊、文件">
+      </label>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active">全部</button>
+        <button class="tab">单聊</button>
+        <button class="tab">群聊</button>
+        <button class="tab">归档</button>
+      </div>
+
+      <div data-thread-list>
+      <article class="thread active" data-type="群聊" data-room="产品安全群" data-meta="128 位成员 · E2EE 已开启 · localhost" data-avatar="A" data-color="teal">
+        <div class="avatar teal">A</div>
+        <div class="thread-main">
+          <div class="thread-top">
+            <strong>产品安全群</strong>
+            <span>10:42</span>
+          </div>
+          <p>服务端通知策略已经更新，请查看后台配置。</p>
+        </div>
+        <b class="badge">6</b>
+      </article>
+
+      <article class="thread" data-type="单聊" data-room="Linda Chen" data-meta="在线 · 3 台设备 · E2EE 已开启" data-avatar="L" data-color="blue">
+        <div class="avatar blue">L</div>
+        <div class="thread-main">
+          <div class="thread-top">
+            <strong>Linda Chen</strong>
+            <span>09:18</span>
+          </div>
+          <p>测试账号已经创建，稍后发你设备列表。</p>
+        </div>
+      </article>
+
+      <article class="thread" data-type="群聊" data-room="运维值班" data-meta="36 位成员 · 私密群 · localhost" data-avatar="O" data-color="amber">
+        <div class="avatar amber">O</div>
+        <div class="thread-main">
+          <div class="thread-top">
+            <strong>运维值班</strong>
+            <span>昨天</span>
+          </div>
+          <p>媒体存储占用 68%，建议本周清理历史文件。</p>
+        </div>
+        <b class="badge muted">2</b>
+      </article>
+
+      <article class="thread" data-type="单聊" data-room="Matrix Bridge" data-meta="服务账号 · 只读通知 · localhost" data-avatar="M" data-color="rose">
+        <div class="avatar rose">M</div>
+        <div class="thread-main">
+          <div class="thread-top">
+            <strong>Matrix Bridge</strong>
+            <span>周五</span>
+          </div>
+          <p>端到端加密已为新房间默认开启。</p>
+        </div>
+      </article>
+      </div>
+      <div class="contacts-list" data-contacts-list hidden></div>
+      <div class="contacts-list" data-files-list hidden></div>
+      <div class="settings-list" data-security-list hidden></div>
+      <div class="settings-list" data-settings-list hidden></div>
+    </section>
+
+    <section class="conversation" aria-label="聊天窗口">
+      <header class="chat-head">
+        <div class="room-title">
+          <div class="avatar teal">A</div>
+          <div>
+            <h2>产品安全群</h2>
+            <p>128 位成员 · E2EE 已开启 · localhost</p>
+          </div>
+        </div>
+        <div class="head-actions">
+          <button class="icon-btn" title="搜索消息">Q</button>
+          <button class="icon-btn" title="语音通话">P</button>
+          <button class="icon-btn" title="群设置">I</button>
+        </div>
+      </header>
+
+      <div class="notice">系统通知：本地开发服务器 http://localhost:8008，Admin API 仅后台内网调用。</div>
+
+      <div class="messages">
+        <div class="day">今天</div>
+        <article class="msg other">
+          <div class="avatar small blue">L</div>
+          <div class="bubble">
+            <div class="meta">Linda Chen · 10:21</div>
+            <p>用户管理第一版建议先包含创建、禁用、改密、设备列表和强制下线。</p>
+          </div>
+        </article>
+        <article class="msg other">
+          <div class="avatar small amber">O</div>
+          <div class="bubble file">
+            <div class="meta">运维值班 · 10:28</div>
+            <strong>media-cleanup-plan.pdf</strong>
+            <span>2.4 MB · 已加密传输</span>
+          </div>
+        </article>
+        <article class="msg mine">
+          <div class="bubble">
+            <div class="meta">我 · 10:35</div>
+            <p>收到。后台第一版按用户、群聊、媒体、举报、系统通知五个模块推进。</p>
+          </div>
+        </article>
+        <article class="msg other">
+          <div class="avatar small rose">M</div>
+          <div class="bubble">
+            <div class="meta">Matrix Bridge · 10:42</div>
+            <p>房间状态同步正常，群成员列表和媒体列表接口等待后台接入。</p>
+          </div>
+        </article>
+      </div>
+      <button class="scroll-bottom" type="button" data-scroll-bottom hidden>↓</button>
+
+      <footer class="composer">
+        <div class="reply-compose" data-reply-compose hidden>
+          <div>
+            <strong>回复</strong>
+            <p data-reply-compose-text></p>
+          </div>
+          <button type="button" data-cancel-reply>取消</button>
+        </div>
+        <button class="tool-btn" title="附件" data-attachment>A</button>
+        <input data-composer placeholder="输入加密消息">
+        <button class="send" data-send>发送</button>
+      </footer>
+    </section>
+
+    <aside class="details" aria-label="会话详情">
+      <section class="profile">
+        <div class="avatar large teal">A</div>
+        <h3>产品安全群</h3>
+        <p>端到端加密默认开启，服务端不读取聊天明文。</p>
+      </section>
+
+      <section class="detail-block">
+        <h4>安全状态</h4>
+        <div class="status-row"><span>当前用户</span><strong data-me-name>Alice Chen</strong></div>
+        <div class="status-row"><span>加密</span><strong data-config-e2ee>开启</strong></div>
+        <div class="status-row"><span>联邦</span><strong data-config-federation>关闭</strong></div>
+        <div class="status-row"><span>注册</span><strong data-config-registration>后台创建</strong></div>
+        <div class="status-row"><span>服务器</span><strong data-config-server>localhost</strong></div>
+      </section>
+
+      <section class="detail-block">
+        <h4>共享文件</h4>
+        <div data-room-files>
+          <div class="file-row"><span>PDF</span><p>media-cleanup-plan.pdf</p></div>
+          <div class="file-row"><span>IMG</span><p>login-flow.png</p></div>
+        </div>
+      </section>
+
+      <section class="detail-block">
+        <h4>成员</h4>
+        <div class="member-grid" data-room-members>
+          <div class="avatar small blue">L</div>
+          <div class="avatar small amber">O</div>
+          <div class="avatar small rose">M</div>
+          <div class="avatar small gray">+9</div>
+        </div>
+      </section>
+    </aside>
+  </main>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <dialog class="modal" data-attachment-modal>
+    <form method="dialog" data-attachment-form>
+      <div class="modal-head">
+        <h3>发送附件</h3>
+        <button class="icon-close" value="close" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <label class="login-field">
+          <span>文件名</span>
+          <input name="name" value="secure-plan.pdf">
+        </label>
+        <label class="login-field">
+          <span>类型</span>
+          <input name="type" value="PDF">
+        </label>
+        <label class="login-field">
+          <span>大小</span>
+          <input name="size" value="1.8 MB">
+        </label>
+      </div>
+      <menu class="modal-actions">
+        <button class="tool-btn" value="close">取消</button>
+        <button class="send" value="confirm">发送</button>
+      </menu>
+    </form>
+  </dialog>
+  <dialog class="modal" data-new-chat-modal>
+    <form method="dialog">
+      <div class="modal-head">
+        <h3>新建会话</h3>
+        <button class="icon-close" value="close" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body" data-new-chat-list></div>
+      <menu class="modal-actions">
+        <button class="tool-btn" value="close">取消</button>
+        <button class="send" value="confirm">创建</button>
+      </menu>
+    </form>
+  </dialog>
+  <dialog class="modal" data-search-modal>
+    <form method="dialog">
+      <div class="modal-head">
+        <h3>搜索消息</h3>
+        <button class="icon-close" value="close" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <label class="login-field">
+          <span>关键词</span>
+          <input data-message-search-input value="">
+        </label>
+        <button class="send full" type="button" data-search-messages>搜索</button>
+        <div class="search-results" data-message-search-results></div>
+      </div>
+      <menu class="modal-actions">
+        <button class="tool-btn" value="close">关闭</button>
+      </menu>
+    </form>
+  </dialog>
+  <dialog class="modal" data-edit-message-modal>
+    <form method="dialog">
+      <div class="modal-head">
+        <h3>编辑消息</h3>
+        <button class="icon-close" value="close" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <label class="login-field">
+          <span>消息内容</span>
+          <input name="content" value="">
+        </label>
+      </div>
+      <menu class="modal-actions">
+        <button class="tool-btn" value="close">取消</button>
+        <button class="send" value="confirm">保存</button>
+      </menu>
+    </form>
+  </dialog>
+  <dialog class="modal" data-forward-message-modal>
+    <form method="dialog">
+      <div class="modal-head">
+        <h3>转发消息</h3>
+        <button class="icon-close" value="close" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-copy" data-forward-message-preview></p>
+        <div class="forward-list" data-forward-message-list></div>
+      </div>
+      <menu class="modal-actions">
+        <button class="tool-btn" value="close">取消</button>
+        <button class="send" value="confirm">转发</button>
+      </menu>
+    </form>
+  </dialog>
+  <dialog class="modal room-modal" data-room-modal>
+    <form method="dialog">
+      <div class="modal-head">
+        <h3>会话详情</h3>
+        <button class="icon-close" value="close" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body" data-room-modal-body></div>
+      <menu class="modal-actions">
+        <button class="tool-btn" value="close">关闭</button>
+      </menu>
+    </form>
+  </dialog>
+  <script src="./app.js"></script>
+</body>
+</html>

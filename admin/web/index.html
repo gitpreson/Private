@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Private IM Admin</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <section class="login-screen" data-login-screen>
+    <form class="login-card" data-login-form>
+      <div class="brand-icon">PX</div>
+      <h1>后台登录</h1>
+      <p>owner：admin/admin123 · 审计：auditor/audit123 · 运营：operator/ops123</p>
+      <label class="field">
+        <span>账号</span>
+        <input name="username" value="admin" autocomplete="username">
+      </label>
+      <label class="field">
+        <span>密码</span>
+        <input name="password" value="admin123" type="password" autocomplete="current-password">
+      </label>
+      <button class="primary full" type="submit">登录</button>
+    </form>
+  </section>
+  <main class="admin-shell">
+    <aside class="sidebar" aria-label="后台导航">
+      <div class="brand">
+        <div class="brand-icon">PX</div>
+        <div>
+          <strong>Private IM</strong>
+          <span>Admin Console</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a class="active" href="#users">用户管理</a>
+        <a href="#rooms">群聊管理</a>
+        <a href="#media">文件管理</a>
+        <a href="#reports">举报审核</a>
+        <a href="#notices">系统通知</a>
+        <a href="#registration">注册管理</a>
+        <a href="#maintenance">系统维护</a>
+      </nav>
+
+      <div class="server-box">
+        <span>Local Synapse</span>
+        <strong>localhost:8008</strong>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">MVP 控制台</p>
+          <h1>运营后台</h1>
+        </div>
+        <div class="top-actions">
+          <div class="session-chip" data-admin-session>
+            <span>未登录</span>
+            <strong>-</strong>
+          </div>
+          <button class="ghost" data-action="logs">查看日志</button>
+          <button class="ghost" data-action="logout">退出</button>
+          <button class="primary" data-action="new-user">新建用户</button>
+        </div>
+      </header>
+
+      <section class="metrics" aria-label="系统指标">
+        <article class="metric">
+          <span>总用户</span>
+          <strong data-stat="users">-</strong>
+          <p><span data-stat="activeUsers">-</span> 个可用账号</p>
+        </article>
+        <article class="metric">
+          <span>活跃群聊</span>
+          <strong data-stat="rooms">-</strong>
+          <p><span data-stat="messages">-</span> 条消息</p>
+        </article>
+        <article class="metric">
+          <span>媒体存储</span>
+          <strong><span data-stat="mediaStorageMb">-</span> MB</strong>
+          <p><span data-stat="media">-</span> 个媒体文件</p>
+        </article>
+        <article class="metric warn">
+          <span>待处理举报</span>
+          <strong data-stat="reports">-</strong>
+          <p><span data-stat="notices">-</span> 条系统通知</p>
+        </article>
+      </section>
+
+      <section class="global-search-panel" aria-label="全局检索">
+        <label class="global-search">
+          <span>全局检索</span>
+          <input data-global-search placeholder="搜索用户、群聊、文件、举报">
+        </label>
+        <div class="search-result-list" data-global-search-results></div>
+      </section>
+
+      <section class="overview-panel" aria-label="运营总览" data-overview></section>
+
+      <section class="grid">
+        <article class="panel wide" id="users">
+          <div class="panel-title">
+            <div>
+              <h2>用户管理</h2>
+              <p>包装 Synapse 用户、设备、封禁和 whois 接口</p>
+            </div>
+            <div class="panel-actions">
+              <label class="table-search">
+                <span>搜索用户</span>
+                <input data-user-search placeholder="搜索用户">
+              </label>
+              <button class="small-btn danger" data-action="bulk-ban-users">批量禁用</button>
+              <button class="small-btn" data-action="bulk-unban-users">批量解封</button>
+              <button class="small-btn" data-action="bulk-logout-users">批量下线</button>
+              <button class="small-btn" data-action="export">导出</button>
+            </div>
+          </div>
+          <table data-user-table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" data-user-select-all></th>
+                <th>用户</th>
+                <th>状态</th>
+                <th>设备</th>
+                <th>房间</th>
+                <th>最近在线</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody data-users-body>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td><strong>@alice:localhost</strong><span>Alice Chen</span></td>
+                <td><b class="pill ok">正常</b></td>
+                <td>3</td>
+                <td>18</td>
+                <td>2 分钟前</td>
+                <td><button class="link-btn" data-action="user-detail">详情</button></td>
+              </tr>
+              <tr>
+                <td><strong>@ops:localhost</strong><span>运维值班</span></td>
+                <td><b class="pill ok">正常</b></td>
+                <td>5</td>
+                <td>42</td>
+                <td>刚刚</td>
+                <td><button class="link-btn" data-action="devices">设备</button></td>
+              </tr>
+              <tr>
+                <td><strong>@risk001:localhost</strong><span>待复核用户</span></td>
+                <td><b class="pill danger">禁用</b></td>
+                <td>1</td>
+                <td>4</td>
+                <td>昨天</td>
+                <td><button class="link-btn" data-action="unban">解封</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="panel" id="rooms">
+          <div class="panel-title">
+            <div>
+              <h2>群聊管理</h2>
+              <p>房间状态、成员、管理员、解散群</p>
+            </div>
+            <div class="panel-actions compact">
+              <button class="small-btn danger" data-action="bulk-close-rooms">批量解散</button>
+              <button class="small-btn" data-action="bulk-quarantine-room-media">批量隔离媒体</button>
+              <button class="small-btn" data-action="public-rooms">公开房间</button>
+            </div>
+          </div>
+          <div class="list" data-rooms-list>
+            <div class="list-row">
+              <div>
+                <strong>产品安全群</strong>
+                <span>128 成员 · E2EE</span>
+              </div>
+              <button class="small-btn" data-action="room-detail">查看</button>
+            </div>
+            <div class="list-row">
+              <div>
+                <strong>运维值班</strong>
+                <span>36 成员 · 私密群</span>
+              </div>
+              <button class="small-btn" data-action="room-state">状态</button>
+            </div>
+            <div class="list-row">
+              <div>
+                <strong>客户支持</strong>
+                <span>82 成员 · 禁言关闭</span>
+              </div>
+              <button class="small-btn danger" data-action="close-room">解散</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="media">
+          <div class="panel-title">
+            <div>
+              <h2>文件管理</h2>
+              <p>隔离违规媒体，控制存储占用</p>
+            </div>
+            <div class="panel-actions compact">
+              <input class="mini-input" data-media-filter placeholder="@user 或 !room">
+              <button class="small-btn" data-action="filter-media">筛选</button>
+              <button class="small-btn" data-action="quarantine-scope">批量隔离</button>
+              <button class="small-btn" data-action="bulk-quarantine-media">隔离所选</button>
+              <button class="small-btn danger" data-action="bulk-delete-media">删除所选</button>
+              <button class="small-btn danger" data-action="cleanup-media">清理隔离</button>
+            </div>
+          </div>
+          <div class="media-list" data-media-list>
+            <div class="media-row">
+              <span>PDF</span>
+              <div>
+                <strong>media-cleanup-plan.pdf</strong>
+                <p>@ops:localhost · 2.4 MB</p>
+              </div>
+              <button class="small-btn" data-action="quarantine">隔离</button>
+            </div>
+            <div class="media-row">
+              <span>IMG</span>
+              <div>
+                <strong>login-flow.png</strong>
+                <p>产品安全群 · 860 KB</p>
+              </div>
+              <button class="small-btn danger" data-action="delete-media">删除</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="reports">
+          <div class="panel-title">
+            <div>
+              <h2>举报审核</h2>
+              <p>消息详情、处理记录、封禁处理</p>
+            </div>
+            <button class="small-btn danger" data-action="bulk-handle-reports">批量处理</button>
+          </div>
+          <div data-reports-list>
+          <div class="report urgent">
+            <span>高</span>
+            <div>
+              <strong>疑似违规图片</strong>
+              <p>来自产品安全群，等待媒体隔离</p>
+            </div>
+            <button class="small-btn danger" data-action="resolve-report">处理</button>
+          </div>
+          <div class="report">
+            <span>中</span>
+            <div>
+              <strong>骚扰消息举报</strong>
+              <p>@risk001:localhost，建议禁用账号</p>
+            </div>
+            <button class="small-btn" data-action="report-detail">查看</button>
+          </div>
+          </div>
+        </article>
+
+        <article class="panel" id="notices">
+          <div class="panel-title">
+            <div>
+              <h2>系统通知</h2>
+              <p>通过 Server Notices 给用户发提醒</p>
+            </div>
+          </div>
+          <label class="field">
+            <span>接收用户</span>
+            <input data-notice-users value="@alice:localhost,@ops:localhost">
+          </label>
+          <div class="template-row" data-notice-templates>
+            <button class="small-btn" data-action="notice-template" data-template="maintenance">维护通知</button>
+            <button class="small-btn" data-action="notice-template" data-template="risk">风控提醒</button>
+            <button class="small-btn" data-action="notice-template" data-template="terms">条款更新</button>
+          </div>
+          <label class="field">
+            <span>通知内容</span>
+            <textarea data-notice-content>系统将于今晚 23:00 进行本地维护演练。</textarea>
+          </label>
+          <button class="primary full" data-action="send-notice">发送通知</button>
+        </article>
+
+        <article class="panel" id="maintenance">
+          <div class="panel-title">
+            <div>
+              <h2>系统维护</h2>
+              <p>第二阶段：注册令牌、清理任务、服务状态</p>
+            </div>
+          </div>
+          <div class="checklist">
+            <label><input type="checkbox" checked> API 状态：<span data-status="api">-</span></label>
+            <label><input type="checkbox" checked> 运行模式：<span data-status="mode">-</span></label>
+            <label><input type="checkbox" checked> 数据层：<span data-status="database">-</span></label>
+            <label><input type="checkbox" checked> Synapse：<span data-status="synapse">-</span></label>
+            <label><input type="checkbox" checked> Admin API：<span data-status="adminApiExposure">-</span></label>
+          </div>
+          <div class="runtime-grid" data-runtime-config></div>
+          <div class="deploy-env-panel" data-deploy-env></div>
+          <div class="runtime-grid" data-storage-status></div>
+          <div class="runtime-grid" data-auth-status></div>
+          <div class="runtime-grid self-check-grid" data-self-check></div>
+          <div class="readiness-panel" data-readiness></div>
+          <div class="coverage-panel" data-feature-coverage></div>
+          <div class="jobs-list" data-operation-jobs></div>
+          <div class="maintenance-actions">
+            <input class="mini-input" data-purge-room value="!ops:localhost">
+            <button class="small-btn" data-action="purge-room">清理房间历史</button>
+            <button class="small-btn" data-action="cleanup-auth-locks">清理过期锁定</button>
+            <button class="small-btn" data-action="generate-secrets">生成安全凭据</button>
+            <button class="small-btn" data-action="export-audit">导出审计日志</button>
+            <button class="small-btn" data-action="export-feature-spec">导出功能说明书</button>
+            <button class="small-btn" data-action="export-release-report">导出交付报告</button>
+            <button class="small-btn" data-action="export-backup">导出备份</button>
+            <button class="small-btn" data-action="import-backup">导入备份</button>
+            <button class="small-btn danger" data-action="reset-demo">重置 Demo 数据</button>
+          </div>
+        </article>
+
+        <article class="panel wide" id="app-config">
+          <div class="panel-title">
+            <div>
+              <h2>客户端配置</h2>
+              <p>保存后 App 预览会从后端读取最新配置</p>
+            </div>
+          </div>
+          <form class="config-grid" data-app-config-form>
+            <label class="field">
+              <span>品牌名称</span>
+              <input name="brandName" value="Private IM">
+            </label>
+            <label class="field">
+              <span>Homeserver</span>
+              <input name="homeserverUrl" value="http://localhost:8008">
+            </label>
+            <label class="field">
+              <span>上传上限 MB</span>
+              <input name="maxUploadMb" value="100" type="number" min="1">
+            </label>
+            <label class="switch-row"><input name="e2eeDefault" type="checkbox" checked> 默认开启 E2EE</label>
+            <label class="switch-row"><input name="registrationEnabled" type="checkbox"> 开放注册</label>
+            <label class="switch-row"><input name="federationEnabled" type="checkbox"> 开启联邦</label>
+            <button class="primary" type="submit">保存配置</button>
+          </form>
+        </article>
+
+        <article class="panel wide" id="registration">
+          <div class="panel-title">
+            <div>
+              <h2>注册管理</h2>
+              <p>创建邀请码，控制 App 自助注册入口</p>
+            </div>
+          </div>
+          <form class="config-grid" data-token-form>
+            <label class="field">
+              <span>邀请码</span>
+              <input name="token" value="TEAM2026">
+            </label>
+            <label class="field">
+              <span>可用次数</span>
+              <input name="usageLimit" value="10" type="number" min="1">
+            </label>
+            <button class="primary" type="submit">创建邀请码</button>
+          </form>
+          <div class="token-list" data-token-list></div>
+        </article>
+      </section>
+    </section>
+  </main>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <dialog class="modal" aria-labelledby="modal-title">
+    <form method="dialog">
+      <div class="modal-head">
+        <h3 id="modal-title">操作详情</h3>
+        <button class="icon-close" value="close" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body"></div>
+      <menu class="modal-actions">
+        <button class="ghost" value="close">取消</button>
+        <button class="primary" value="confirm">确认</button>
+      </menu>
+    </form>
+  </dialog>
+  <script src="./app.js"></script>
+</body>
+</html>

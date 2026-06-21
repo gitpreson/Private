@@ -1,0 +1,11 @@
+{
+  "platform": "android",
+  "versionName": "0.1.0",
+  "versionCode": 1,
+  "apkUrl": "https://download.example.com/private-im/app-release.apk",
+  "notes": [
+    "私有 IM 第一版预览包",
+    "支持登录、注册、单聊、群聊、文件、安全和设置入口"
+  ],
+  "forceUpdate": false
+}

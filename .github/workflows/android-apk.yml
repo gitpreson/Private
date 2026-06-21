@@ -1,0 +1,69 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "app/**"
+      - ".github/workflows/android-apk.yml"
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Create Android project files
+        run: flutter create --platforms=android .
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: private-im-release-apk
+          path: app/build/app/outputs/flutter-apk/app-release.apk
+
+  upload-server:
+    needs: build-apk
+    runs-on: ubuntu-latest
+    if: ${{ vars.APK_UPLOAD_ENABLED == 'true' }}
+
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: private-im-release-apk
+          path: dist
+
+      - name: Upload APK to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.APK_SERVER_HOST }}
+          username: ${{ secrets.APK_SERVER_USER }}
+          key: ${{ secrets.APK_SERVER_SSH_KEY }}
+          port: ${{ secrets.APK_SERVER_PORT || 22 }}
+          source: "dist/app-release.apk"
+          target: ${{ secrets.APK_SERVER_PATH }}
