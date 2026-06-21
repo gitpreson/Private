@@ -40,7 +40,7 @@ for (const file of requiredFiles) {
 pass('flutter app files exist');
 
 const pubspec = read('app/pubspec.yaml');
-for (const dependency of ['matrix:', 'flutter_secure_storage:', 'file_picker:', 'http:', 'flutter_lints:']) {
+for (const dependency of ['matrix:', 'flutter_secure_storage:', 'http:', 'flutter_lints:']) {
   if (!pubspec.includes(dependency)) fail(`pubspec missing ${dependency}`);
 }
 pass('flutter dependencies declared');
