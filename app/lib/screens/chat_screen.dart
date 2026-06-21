@@ -67,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final events = _timeline?.events ?? [];
-    final roomName = widget.room.getLocalizedDisplayName();
+    final roomName = widget.room.getLocalizedDisplayname();
     return Scaffold(
       appBar: AppBar(
         title: Text(roomName),

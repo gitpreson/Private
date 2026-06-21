@@ -8,7 +8,7 @@ class RoomInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final roomName = room.getLocalizedDisplayName();
+    final roomName = room.getLocalizedDisplayname();
     return Scaffold(
       appBar: AppBar(title: const Text('会话详情')),
       body: ListView(

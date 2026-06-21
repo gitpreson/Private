@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     separatorBuilder: (_, __) => const Divider(height: 1),
                     itemBuilder: (context, index) {
                       final room = rooms[index];
-                      final name = room.getLocalizedDisplayName();
+                      final name = room.getLocalizedDisplayname();
                       return ListTile(
                         leading: CircleAvatar(child: Text((name.isNotEmpty ? name : '#')[0].toUpperCase())),
                         title: Text(name),
