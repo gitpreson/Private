@@ -71,9 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     separatorBuilder: (_, __) => const Divider(height: 1),
                     itemBuilder: (context, index) {
                       final room = rooms[index];
+                      final name = room.getLocalizedDisplayName();
                       return ListTile(
-                        leading: CircleAvatar(child: Text((room.displayname.isNotEmpty ? room.displayname : '#')[0].toUpperCase())),
-                        title: Text(room.displayname),
+                        leading: CircleAvatar(child: Text((name.isNotEmpty ? name : '#')[0].toUpperCase())),
+                        title: Text(name),
                         subtitle: Text(room.lastEvent?.text ?? 'Matrix room'),
                         trailing: room.notificationCount > 0 ? Badge(label: Text('${room.notificationCount}')) : null,
                         onTap: () => Navigator.of(context).push(
