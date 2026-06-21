@@ -4,11 +4,7 @@ import 'package:matrix/matrix.dart';
 import '../config/app_config.dart';
 
 class MatrixService {
-  MatrixService(this.config)
-      : client = Client(
-          config.brandName,
-          databaseBuilder: (_) async => null,
-        );
+  MatrixService(this.config) : client = Client(config.brandName);
 
   final AppConfig config;
   final Client client;
@@ -21,9 +17,11 @@ class MatrixService {
     final accessToken = await _storage.read(key: 'accessToken');
     final userId = await _storage.read(key: 'userId');
     if (homeserver == null || accessToken == null || userId == null) return;
-    await client.checkHomeserver(Uri.parse(homeserver));
-    client.accessToken = accessToken;
-    client.userID = userId;
+    await client.init(
+      newToken: accessToken,
+      newUserID: userId,
+      newHomeserver: Uri.parse(homeserver),
+    );
   }
 
   Future<void> login({
