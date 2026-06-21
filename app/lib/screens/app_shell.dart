@@ -20,12 +20,19 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> {
+  late AppConfig _config;
   late bool _loggedIn;
 
   @override
   void initState() {
     super.initState();
+    _config = widget.config;
     _loggedIn = widget.matrix.isLoggedIn;
+  }
+
+  void _setConfig(AppConfig value) {
+    widget.matrix.updateConfig(value);
+    setState(() => _config = value);
   }
 
   void _setLoggedIn(bool value) {
@@ -36,13 +43,14 @@ class _AppShellState extends State<AppShell> {
   Widget build(BuildContext context) {
     if (!_loggedIn) {
       return LoginScreen(
-        config: widget.config,
+        config: _config,
         matrix: widget.matrix,
+        onConfigChanged: _setConfig,
         onLoggedIn: () => _setLoggedIn(true),
       );
     }
     return HomeScreen(
-      config: widget.config,
+      config: _config,
       matrix: widget.matrix,
       onLoggedOut: () => _setLoggedIn(false),
     );

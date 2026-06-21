@@ -6,11 +6,33 @@ import '../config/app_config.dart';
 class MatrixService {
   MatrixService(this.config) : client = Client(config.brandName);
 
-  final AppConfig config;
+  AppConfig config;
   final Client client;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   bool get isLoggedIn => client.isLogged();
+
+  void updateConfig(AppConfig nextConfig) {
+    config = nextConfig;
+  }
+
+  Future<void> restoreConfigOverrides() async {
+    final homeserverUrl = await _storage.read(key: 'configHomeserverUrl');
+    final adminBackendUrl = await _storage.read(key: 'configAdminBackendUrl');
+    if (homeserverUrl == null && adminBackendUrl == null) return;
+    updateConfig(
+      config.copyWith(
+        homeserverUrl: homeserverUrl,
+        adminBackendUrl: adminBackendUrl,
+      ),
+    );
+  }
+
+  Future<void> saveConfig(AppConfig nextConfig) async {
+    updateConfig(nextConfig);
+    await _storage.write(key: 'configHomeserverUrl', value: nextConfig.homeserverUrl);
+    await _storage.write(key: 'configAdminBackendUrl', value: nextConfig.adminBackendUrl);
+  }
 
   Future<void> restoreSession() async {
     final homeserver = await _storage.read(key: 'homeserver');
@@ -44,7 +66,9 @@ class MatrixService {
     if (client.isLogged()) {
       await client.logout();
     }
-    await _storage.deleteAll();
+    await _storage.delete(key: 'homeserver');
+    await _storage.delete(key: 'accessToken');
+    await _storage.delete(key: 'userId');
   }
 
   Future<List<Room>> rooms() async {

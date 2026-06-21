@@ -8,8 +8,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final config = await AppConfig.load();
   final matrix = MatrixService(config);
+  await matrix.restoreConfigOverrides();
   await matrix.restoreSession();
-  runApp(PrivateImApp(config: config, matrix: matrix));
+  runApp(PrivateImApp(config: matrix.config, matrix: matrix));
 }
 
 class PrivateImApp extends StatelessWidget {

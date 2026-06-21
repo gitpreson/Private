@@ -55,6 +55,9 @@ const matrixService = read('app/lib/services/matrix_service.dart');
 for (const snippet of ['Client(', 'checkHomeserver', 'login(', 'FlutterSecureStorage', 'sendTextEvent']) {
   if (!matrixService.includes(snippet)) fail(`matrix service missing ${snippet}`);
 }
+for (const snippet of ['restoreConfigOverrides', 'saveConfig', 'configHomeserverUrl', 'configAdminBackendUrl']) {
+  if (!matrixService.includes(snippet)) fail(`matrix service missing server config support: ${snippet}`);
+}
 pass('matrix service covers login/session/send');
 
 const backendService = read('app/lib/services/app_backend_service.dart');
@@ -72,5 +75,11 @@ pass('home screen navigation present');
 const chat = read('app/lib/screens/chat_screen.dart');
 if (!chat.includes('RoomInfoScreen')) fail('chat screen missing room info entry');
 pass('chat room info entry present');
+
+const login = read('app/lib/screens/login_screen.dart');
+for (const snippet of ['服务器设置', '手机安装 APK 后不能连接 127.0.0.1', 'Homeserver URL', 'Admin Backend URL']) {
+  if (!login.includes(snippet)) fail(`login screen missing server setting copy: ${snippet}`);
+}
+pass('login server settings present');
 
 console.log('app check passed');
